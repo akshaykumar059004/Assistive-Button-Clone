@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -84,14 +85,16 @@ public class ButtonService extends Service implements View.OnTouchListener {
                 return true;
             case MotionEvent.ACTION_UP:
                 handler.removeCallbacks(longPressed);
-                if (curTime - downTapTime <= 150) {
-                    try {
-                        process.getOutputStream().write(("su -c input keyevent " + KeyEvent.KEYCODE_BACK + "\n").getBytes());
-                        process.getOutputStream().flush();
-                    } catch (IOException e) {
-                        Log.e("tag", "Shell command failed");
-                    }
-                }
+                Toast.makeText(getApplicationContext(), "Floating button clicked!", Toast.LENGTH_SHORT).show();
+//                if (curTime - downTapTime <= 150) {
+//                    try {
+//                        process.getOutputStream().write(("su -c input keyevent " + KeyEvent.KEYCODE_BACK + "\n").getBytes());
+//                        process.getOutputStream().flush();
+//                    } catch (IOException e) {
+//                        Log.e("tag", "Shell command failed");
+//                    }
+//                }
+
                 return true;
             case MotionEvent.ACTION_MOVE:
                 if (Math.abs(event.getRawY() - initialTouchY) > 100 && Math.abs(event.getRawX() - initialTouchX) > 100)
