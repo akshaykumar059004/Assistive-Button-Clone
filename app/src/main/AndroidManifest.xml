@@ -4,6 +4,8 @@
     android:installLocation="auto">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.READ_SCREEN_CONTENT"/>
+
 
     <application
         android:allowBackup="true"
@@ -24,8 +26,18 @@
         </activity>
 
         <service
+            android:exported="true"
             android:name=".ButtonService"
-            android:enabled="true"/>
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibility-service"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
     </application>
 
 </manifest>

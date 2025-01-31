@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Button</string>
+    <string name="accessibility_service_description">screen content reader</string>
 </resources>
