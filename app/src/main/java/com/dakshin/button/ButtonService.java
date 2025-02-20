@@ -1,6 +1,8 @@
 package com.dakshin.button;
 
 import android.accessibilityservice.AccessibilityService;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.accessibility.AccessibilityEvent;
 import android.graphics.PixelFormat;
 import android.view.MotionEvent;
@@ -60,16 +62,15 @@ public class ButtonService extends AccessibilityService implements View.OnTouchL
             case MotionEvent.ACTION_UP:
                 Toast.makeText(getApplicationContext(), "Floating button clicked!", Toast.LENGTH_SHORT).show();
 
-                if (this.getServiceInfo() != null) {  // Check if service is running
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
                     AccessibilityNodeInfo rootNode = getRootInActiveWindow();
                     if (rootNode != null) {
                         extractTextFromNode(rootNode);
                     } else {
-                        Log.e("ButtonService", "Root node is null. Ensure Accessibility Service is enabled.");
+                        Log.e("ButtonService", "Root node is still null after delay. Ensure service is enabled.");
                     }
-                } else {
-                    Log.e("ButtonService", "Accessibility Service is not running.");
-                }
+                }, 500); // Delay by 500ms
+
                 return true;
 
             case MotionEvent.ACTION_MOVE:
@@ -84,14 +85,7 @@ public class ButtonService extends AccessibilityService implements View.OnTouchL
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED ||
-                event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
 
-            AccessibilityNodeInfo rootNode = getRootInActiveWindow();
-            if (rootNode != null) {
-                extractTextFromNode(rootNode);
-            }
-        }
     }
 
     private void extractTextFromNode(AccessibilityNodeInfo node) {
